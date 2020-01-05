@@ -9,8 +9,7 @@
 #include <algorithm>
 #include <cmath>
 
-#define max(A, B) (((A) > (B))?(A):(B))
-#define min(A, B) (((A) < (B))?(A):(B))
+#include "tools.hpp"
 
 template<class T>
 class Vector
@@ -306,25 +305,6 @@ std::string as_extended_matrix(Vector<Vector<T>> v)
 	}
 
 	return out.str();
-}
-
-// greatest common divisor
-// P.S. сами пишите своего евклида
-// P.P.S. "х&@$ х&@$ и в продакшн!"
-template<class T>
-const T gcd(const T &t0, const T &t1)
-{
-	for(T i=t0; i>T(0); --i)
-		if ((t0 % i == T(0)) && (t1 % i == T(0)))
-			return i;
-	return T(1);
-}
-
-// least common multiple
-template<class T>
-const T lcm(const T &t0, const T &t1)
-{
-	return (t0 * t1) / gcd(t0, t1);
 }
 
 template<class T>
