@@ -1,8 +1,7 @@
 #ifndef FRACT_HPP
 #define FRACT_HPP
 
-#include <cmath>
-#include <iostream>
+#include <ostream>
 
 // Fractional number
 class Fract

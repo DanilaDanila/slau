@@ -7,6 +7,8 @@
 #include <cmath>
 #include <algorithm>
 
+#include <iostream>
+
 template<class T>
 std::string as_slau(Vector<Vector<T>> v)
 {

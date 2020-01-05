@@ -2,7 +2,7 @@
 
 #include <numeric>
 #include <cmath>
-#include <iostream>
+#include <ostream>
 
 Fract::Fract() { p=0; q=1; }
 
