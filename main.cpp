@@ -74,7 +74,7 @@ public:
 
 		T *new_data = new T[new_capacity_];
 
-		size_t new_size_ = min(new_capacity_, size_);
+		size_t new_size_ = std::min(new_capacity_, size_);
 		for(size_t i=0; i<new_size_; ++i)
 			new_data[i] = data[i];
 
@@ -122,7 +122,7 @@ public:
 	// it can be much more faster
 	const Vector<T> &operator+=(const Vector<T> &v)
 	{
-		realloc(max(size_, v.size_));
+		realloc(std::max(size_, v.size_));
 		
 		for(size_t i=0; i<capacity_; ++i)
 			data[i] = _at(i) + v._at(i);
@@ -135,7 +135,7 @@ public:
 	// it can be much more faster
 	const Vector<T> &operator-=(const Vector<T> &v)
 	{
-		realloc(max(size_, v.size_));
+		realloc(std::max(size_, v.size_));
 		
 		for(size_t i=0; i<capacity_; ++i)
 			data[i] = _at(i) - v._at(i);

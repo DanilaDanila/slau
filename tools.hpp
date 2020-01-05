@@ -1,9 +1,6 @@
 #ifndef TOOLS_HPP
 #define TOOLS_HPP
 
-#define max(A, B) (((A) > (B))?(A):(B))
-#define min(A, B) (((A) < (B))?(A):(B))
-
 // greatest common divisor
 // P.S. сами пишите своего евклида
 // P.P.S. "х&@$ х&@$ и в продакшн!"
