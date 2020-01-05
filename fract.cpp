@@ -38,7 +38,7 @@ const Fract &Fract::operator+=(Fract f)
 
 	return *this;
 }
-    
+
 const Fract &Fract::operator-=(Fract f)
 {
 	p *= f.q;
@@ -61,7 +61,7 @@ const Fract &Fract::operator*=(const Fract &f)
 
 	return *this;
 }
-    
+
 const Fract &Fract::operator/=(const Fract &f)
 {
 	Fract new_f(q, std::abs(f.p));

@@ -3,7 +3,7 @@ I_DIR=
 L_DIR=
 OUTPUT=slau_solver
 
-all: main.o fract.o
+all: main.o fract.o vector.hpp vector.cpp 
 	$(COMPILER) *.o -std=c++17 -I$(I_DIR) -L$(L_DIR) -o $(OUTPUT)
 
 main.o: main.cpp
