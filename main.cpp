@@ -27,7 +27,7 @@ int main()
 	 * 5x1 + 2x3 + 5x4 = -2
 	 * 6x1 + x2 + 5x3 + 7x4 = -4
 	 * 2x1 + x2 + 2x3 + 2x4 = -2
-	 */
+	 */	
 	
 	Vector<Vector<int>> slau0={{0, 1, 3, -1},
 						  	   {2, 3, 5, 3},
@@ -46,63 +46,8 @@ int main()
 						   	   {6, 1, 5, 7, -4},
 						   	   {2, 1, 2, 2, -2}};
 
-	Vector<Vector<int>>	v=slau1;
-	Vector<Vector<int>> v_cpy=v;
-	
-	std::cout<<"\n"<<as_slau(v);
-	for(size_t i=0; i<v.size()-1; ++i)
-		slau_next_step(v, i);
-
-	size_t rank = triangle_matrix_rank(v);
-	std::cout<<"Rank: "<<rank<<"\n";
-
-	size_t vars_count = v[0].size()-1;
-	size_t fixed_vars_count = vars_count - rank;
-	size_t vec_dim = fixed_vars_count + 1;
-	Vector<Vector<Fract>> vars(vars_count);
-  	
-	for(size_t i=0; i<vars_count; ++i)
-		for(size_t j=0; j<fixed_vars_count+1; ++j)
-			vars[i].append(0);
-
-	for(size_t i=0; i<fixed_vars_count; ++i)
-		vars[vars_count-1-i][fixed_vars_count-i] = 1;
-
-	std::cout<<as_matrix(vars)<<"\n";
-
-	Vector<Fract> e;
-	e.append(1);
-	for(size_t i=1; i<vec_dim; ++i)
-		e.append(0);
-
-	for(long row = vars_count-1-fixed_vars_count; row>=0; --row)
-	{
-		Vector<Fract> sum;
-		for(size_t i=0; i<vec_dim; ++i)
-			sum.append(0);
-
-		for(size_t var_n = row+1; var_n<vars_count; ++var_n)
-			sum += v[row][var_n] * vars[var_n];
-
-		std::cout<<row<<"\n";
-		std::cout<<e*v[row][vars_count]<<" - "<<sum<<"\n";
-		std::cout<<(e*v[row][vars_count] - sum)<<" / "<<v[row][row]<<"\n";
-		vars[row] = (e*v[row][vars_count] - sum) / Fract(v[row][row]);
-		std::cout<<as_matrix(vars)<<"\n";
-	}
-
-	std::cout<<"Triangular matrix:\n";
-	std::cout<<as_extended_matrix(v)<<"\n";
-
-	std::cout<<"SLAU:\n";
-	std::cout<<as_slau(v_cpy)<<"\n";
-
-	std::cout<<"Triangular SLAU:\n";
-	std::cout<<as_slau(v)<<"\n";
-
-	std::cout<<"RESULT:\n";
-	std::cout<<as_matrix(vars);
-
+	std::cout<<as_slau(slau0)<<"\n";
+	std::cout<<as_matrix(get_solution(slau0))<<"\n\n";
 
 	return 0;
 }

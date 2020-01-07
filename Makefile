@@ -1,16 +1,17 @@
 COMPILER=g++
+STD=-std=c++17
 I_DIR=
 L_DIR=
-OUTPUT=slau_solver
+OUTPUT=solver
 
 all: main.o fract.o vector.hpp vector.cpp 
-	$(COMPILER) *.o -std=c++17 -I$(I_DIR) -L$(L_DIR) -o $(OUTPUT)
+	$(COMPILER) *.o $(STD) -I$(I_DIR) -L$(L_DIR) -o $(OUTPUT)
 
 main.o: main.cpp
-	$(COMPILER) -c main.cpp
+	$(COMPILER) $(STD) -c main.cpp
 
 fract.o: fract.hpp fract.cpp
-	$(COMPILER) -c fract.cpp -std=c++17
+	$(COMPILER) $(STD) -c fract.cpp -std=c++17
 
 clean:
 	rm *.o $(OUTPUT)

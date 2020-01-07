@@ -2,6 +2,7 @@
 #define SLAU_HPP
 
 #include "vector.hpp"
+#include "fract.hpp"
 #include <sstream>
 #include <iomanip>
 #include <cmath>
@@ -26,6 +27,8 @@ size_t triangle_matrix_rank(const Vector<Vector<T>>&);
 
 template<class T>
 const Vector<Vector<T>> transform(const Vector<Vector<T>>&);
+
+const Vector<Vector<Fract>> get_solution(Vector<Vector<int>>);
 
 #include "slau.cpp"
 

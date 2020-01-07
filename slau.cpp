@@ -5,9 +5,9 @@ std::string as_slau(const Vector<Vector<T>> &v)
 
     for(size_t i=0; i<v.size(); ++i)
     {
-        out<<v[i][0]<<"*x1";
+        out<<"("<<v[i][0]<<")*x1";
         for(size_t j=1; j<v[0].size()-1; ++j)
-            out<<" + "<<v[i][j]<<"*x"<<j+1;
+            out<<" + ("<<v[i][j]<<")*x"<<j+1;
         out<<" = "<<v[i][v[i].size()-1]<<"\n";
     }
 
@@ -74,41 +74,42 @@ std::string as_extended_matrix(const Vector<Vector<T>> &v)
 
     return out.str();
 }
+
 template<class T>
 void slau_next_step(Vector<Vector<T>> &v, const size_t &step)
 {
     std::sort(v.begin()+step, v.end(), [=](auto x, auto y){return std::abs(x[step]) > std::abs(y[step]);});
 
-    std::cout<<"After sort:\n";
-    std::cout<<as_extended_matrix(v)<<"\n";
+    std::cerr<<"After sort:\n";
+    std::cerr<<as_extended_matrix(v)<<"\n";
 
     size_t row = step+1;
     for(; row < v.size(); ++row)
         if(v[row][step] != 0)
         {
-            std::cout<<"PROCESS:\n";
-            std::cout<<as_extended_matrix(v)<<"\n";
+            std::cerr<<"PROCESS:\n";
+            std::cerr<<as_extended_matrix(v)<<"\n";
 
             if(v[step][step] < 0)
             {
                 v[step] *= -1;
-                std::cout<<as_extended_matrix(v)<<"\n";
+                std::cerr<<as_extended_matrix(v)<<"\n";
             }
 
             T least_of = lcm(v[step][step], std::abs(v[row][step]));
             T zero_mul = least_of / v[step][step];
             T row_mul = least_of / v[row][step];
 
-            std::cout<<step<<" must be mul by "<<zero_mul<<"\n";
-            std::cout<<row<<" must be mul by "<<row_mul<<"\n\n";
+            std::cerr<<step<<" must be mul by "<<zero_mul<<"\n";
+            std::cerr<<row<<" must be mul by "<<row_mul<<"\n\n";
 
             v[step] *= zero_mul;
             v[row] *= row_mul;
-            std::cout<<as_extended_matrix(v)<<"\n";
+            std::cerr<<as_extended_matrix(v)<<"\n";
             v[row] -= v[step];
-            std::cout<<as_extended_matrix(v)<<"\n";
+            std::cerr<<as_extended_matrix(v)<<"\n";
             v[step] /= zero_mul;
-            std::cout<<as_extended_matrix(v)<<"\n";
+            std::cerr<<as_extended_matrix(v)<<"\n";
 
             T div = T(1);
             for(size_t i=1; i<v[row].size(); ++i)
@@ -122,12 +123,12 @@ void slau_next_step(Vector<Vector<T>> &v, const size_t &step)
                 if(v[row][i] != 0)
                     div = gcd(div, std::abs(v[row][i]));
 
-            std::cout<<row<<" can be divided by "<<div<<"\n\n";
+            std::cerr<<row<<" can be divided by "<<div<<"\n\n";
             v[row] /= div;
-            std::cout<<as_extended_matrix(v);
-            std::cout<<"DONE!\n";
+            std::cerr<<as_extended_matrix(v);
+            std::cerr<<"DONE!\n";
         }
-    std::cout<<"RETURN----------------------------\n";
+    std::cerr<<"RETURN----------------------------\n";
 }
 
 template<class T>
@@ -162,4 +163,43 @@ const Vector<Vector<T>> transform(const Vector<Vector<T>> &v)
     }
 
     return result;
+}
+
+const Vector<Vector<Fract>> get_solution(Vector<Vector<int>> slau)
+{
+	for(size_t i=0; i<slau.size()-1; ++i)
+        slau_next_step(slau, i);
+
+    size_t rank = triangle_matrix_rank(slau);
+
+    size_t vars_count = slau[0].size()-1;
+    size_t fixed_vars_count = vars_count - rank;
+    size_t vec_dim = fixed_vars_count + 1;
+    Vector<Vector<Fract>> vars(vars_count);
+
+    for(size_t i=0; i<vars_count; ++i)
+        for(size_t j=0; j<fixed_vars_count+1; ++j)
+            vars[i].append(0);
+
+    for(size_t i=0; i<fixed_vars_count; ++i)
+        vars[vars_count-1-i][fixed_vars_count-i] = 1;
+
+    Vector<Fract> e;
+    e.append(1);
+    for(size_t i=1; i<vec_dim; ++i)
+        e.append(0);
+
+    for(long row = vars_count-1-fixed_vars_count; row>=0; --row)
+    {
+        Vector<Fract> sum;
+        for(size_t i=0; i<vec_dim; ++i)
+            sum.append(0);
+
+        for(size_t var_n = row+1; var_n<vars_count; ++var_n)
+            sum += slau[row][var_n] * vars[var_n];
+
+        vars[row] = (e*slau[row][vars_count] - sum) / Fract(slau[row][row]);
+    }
+
+	return vars;
 }
